@@ -1,17 +1,8 @@
-
-install.packages("rvest")
-install.packages("dplyr")
-install.packages("ggplot2")
-install.packages("RColorBrewer")
-install.packages("dslabs")
-
-
 library(rvest)
 library(dplyr)
 library(ggplot2)
 library(RColorBrewer)
 library(dslabs)
-######## http://ljk.imag.fr/membres/Clementine.Prieur/M1SSD/04exemple.pdf #######
 url <- "http://www.statsci.org/data/oz/strokeass.txt"
 eval2 <- read.delim(url)
 download.file(url, "eval2.txt")
