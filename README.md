@@ -27,15 +27,15 @@ install.packages("datasets"")
 
 > analyse.R  
 
---> télécharge et traite les données issues des sites fournits puis exportes 
+télécharge et traite les données issues des sites fournits puis exportes 
 
 > synthese.R 
 
---> permet de creer un ensemble de test et les exporte dans le dossier figs/synthese/synthese++.pdf 
+permet de creer un ensemble de test et les exporte dans le dossier figs/synthese/synthese++.pdf 
 
 > testSWW.R 
 
---> permet de choisir le bon test Student Welch ou Wilcoxon (SWW) et de trouver la p-value correspondante
+permet de choisir le bon test Student Welch ou Wilcoxon (SWW) et de trouver la p-value correspondante
 
 > inspiration  
 
@@ -62,4 +62,8 @@ delta = eval7$Pulse2-eval7$Pulse1
      
      anova(breaks.aov)  
      coef(breaks.aov)
+```
+
+```{r}
+paste("Hello", "World!")
 ```
