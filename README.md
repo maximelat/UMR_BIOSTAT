@@ -37,7 +37,7 @@ testSWW.R
 inspiration ######## http://ljk.imag.fr/membres/Clementine.Prieur/M1SSD/04exemple.pdf #######
 
 
-```{R}
+```{r}
 delta = eval7$Pulse2-eval7$Pulse1
     IMC = eval7$Weight/((eval7$Height/100)^2)
     Gender <- eval7$Gender
