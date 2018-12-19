@@ -1,8 +1,12 @@
 # UMR_BIOSTAT
-# Header 1
-hello! 
+Consignes d'utilisation 
+### Header 1
+
+D'abord il faut installer les bons packages : 
 
 Packages à installer : 
+paste("Hello", "World!")
+```{r}
 install.packages("rvest")
 install.packages("dplyr")
 install.packages("ggplot2")
@@ -19,7 +23,7 @@ install.packages("methods"")
 install.packages("grDevices"")
 install.packages("graphics"")
 install.packages("datasets"")
-
+```
 
 analyse.R
 --> télécharge et traite les données issues des sites fournits
