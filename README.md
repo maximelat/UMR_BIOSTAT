@@ -1,3 +1,10 @@
+---
+title: "A Web Doc"
+author: "John Doe"
+date: "May 1, 2015"
+output: pdf_document
+---
+
 # UMR_BIOSTAT
 
 ### Consignes d'utilisation 
@@ -5,7 +12,7 @@
 D'abord il faut installer les bons packages : 
 
 Packages à installer : 
-paste("Hello", "World!")
+
 ```{r}
 install.packages("rvest")
 install.packages("dplyr")
