@@ -26,15 +26,20 @@ install.packages("datasets"")
 ```
 
 > analyse.R  
+
 --> télécharge et traite les données issues des sites fournits puis exportes 
 
 > synthese.R 
+
 --> permet de creer un ensemble de test et les exporte dans le dossier figs/synthese/synthese++.pdf 
 
-> testSWW.R  
+> testSWW.R 
+
 --> permet de choisir le bon test Student Welch ou Wilcoxon (SWW) et de trouver la p-value correspondante
 
-> inspiration  http://ljk.imag.fr/membres/Clementine.Prieur/M1SSD/04exemple.pdf 
+> inspiration  
+
+http://ljk.imag.fr/membres/Clementine.Prieur/M1SSD/04exemple.pdf 
 
 
 ```{r}
