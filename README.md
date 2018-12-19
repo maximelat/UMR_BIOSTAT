@@ -41,7 +41,7 @@ permet de choisir le bon test Student Welch ou Wilcoxon (SWW) et de trouver la p
 
 http://ljk.imag.fr/membres/Clementine.Prieur/M1SSD/04exemple.pdf 
 
-
+formules à lancer dans le fichier analyse.R
 ```{r}
 delta = eval7$Pulse2-eval7$Pulse1
     IMC = eval7$Weight/((eval7$Height/100)^2)

@@ -103,6 +103,7 @@ eval7 %>%
 dev.print(device = pdf, file = gsub(" ","",paste("./figs/densite_IMCVSAlcohol_eval7.pdf")), bg="white")
 
 
+## BoxPlot 
 delta <-  eval7$Pulse2-eval7$Pulse1
 
   boxplot(delta ~ Smokes, data = eval7) 
