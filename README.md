@@ -1,10 +1,3 @@
----
-title: "A Web Doc"
-author: "John Doe"
-date: "May 1, 2015"
-output: pdf_document
----
-
 # UMR_BIOSTAT
 
 ### Consignes d'utilisation 
@@ -33,13 +26,35 @@ install.packages("datasets"")
 ```
 
 analyse.R
---> télécharge et traite les données issues des sites fournits
+--> télécharge et traite les données issues des sites fournits puis exportes 
 
 synthese.R 
---> permet de creer un ensemble de test et les exporte dans le dossier figs 
+--> permet de creer un ensemble de test et les exporte dans le dossier figs/synthese/synthese++.pdf 
 
 testSWW.R
 --> permet de choisir le bon test Student Welch ou Wilcoxon (SWW) et de trouver la p-value correspondante
 
 inspiration ######## http://ljk.imag.fr/membres/Clementine.Prieur/M1SSD/04exemple.pdf #######
 
+
+```{R}
+delta = eval7$Pulse2-eval7$Pulse1
+    IMC = eval7$Weight/((eval7$Height/100)^2)
+    Gender <- eval7$Gender
+    Age <- eval7$Age
+    Smokes <- eval7$Smokes
+    Alcohol <- eval7$Alcohol
+    Exercice <- eval7$Exercise
+    Ran <- eval7$Ran
+
+     breaks.aov <- aov(delta ~ IMC+Gender+Age+Smokes*Alcohol+Exercice*Ran)
+  
+     anova(breaks.aov)  
+     coef(breaks.aov)
+     
+     
+     breaks.aov <- aov(delta ~ Age+Smokes+Ran)
+     
+     anova(breaks.aov)  
+     coef(breaks.aov)
+     ```

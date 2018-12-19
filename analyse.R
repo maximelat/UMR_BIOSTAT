@@ -63,6 +63,8 @@ eval7 %>%
   //geom_label(aes(IMC, delta,label=Gender, color=Gender)) 
   // geom_text(aes(IMC, delta, label=Gender, color=Gender)) 
   //facet_grid(Gender~.)
+dev.print(device = pdf, file = gsub(" ","",paste("./figs/dispersion_echantillons_eval7.pdf")), bg="white")
+
 
 
 ## densité de delta en fonction du sexe
@@ -70,36 +72,44 @@ eval7 %>%
   mutate(delta = Pulse2-Pulse1) %>% 
   ggplot(aes(delta,color = Gender,fill = Gender)) + 
   geom_density(aes(delta, color = Gender,fill = Gender), alpha = 0.2)
+dev.print(device = pdf, file = gsub(" ","",paste("./figs/densite_DeltaVSGenre_eval7.pdf")), bg="white")
 
 ## densité de delta en fonction de la consomation frequente d'alcool
 eval7 %>%  
   mutate(delta = Pulse2-Pulse1) %>% 
   ggplot(aes(delta,color = Alcohol,fill = Alcohol)) + 
   geom_density(aes(delta, color = Alcohol, fill = Alcohol), alpha = 0.2)
+dev.print(device = pdf, file = gsub(" ","",paste("./figs/densite_DeltaVSalcohol_eval7.pdf")), bg="white")
 
 ## densité IMC en fonction du sexe
 eval7 %>%  
   mutate(IMC = Weight/((Height/100)^2)) %>%  
   ggplot(aes(IMC,color = Gender,fill = Gender)) + 
   geom_density(aes(IMC, color = Gender,fill = Gender), alpha = 0.2)
+dev.print(device = pdf, file = gsub(" ","",paste("./figs/densite_IMCVSGenre_eval7.pdf")), bg="white")
 
 ## densité de l'IMC en fonction de fumeur ou non 
 eval7 %>%  
   mutate(IMC = Weight/((Height/100)^2)) %>%  
   ggplot(aes(IMC,color = Smokes,fill = Smokes)) + 
   geom_density(aes(IMC, color = Smokes,fill = Smokes), alpha = 0.2)
+dev.print(device = pdf, file = gsub(" ","",paste("./figs/densite_IMCVSSmokes_eval7.pdf")), bg="white")
 
 ## densité de l'IMC en fonction de alcohol ou non 
 eval7 %>%  
   mutate(IMC = Weight/((Height/100)^2)) %>%  
   ggplot(aes(IMC,color = Alcohol,fill = Alcohol)) + 
   geom_density(aes(IMC, color = Alcohol,fill = Alcohol), alpha = 0.2)
+dev.print(device = pdf, file = gsub(" ","",paste("./figs/densite_IMCVSAlcohol_eval7.pdf")), bg="white")
 
 
 delta <-  eval7$Pulse2-eval7$Pulse1
 
   boxplot(delta ~ Smokes, data = eval7) 
+  dev.print(device = pdf, file = gsub(" ","",paste("./figs/boxplot_deltaVSSmokes_eval7.pdf")), bg="white")
+  
   boxplot(delta ~ Gender, data = eval7)
+  dev.print(device = pdf, file = gsub(" ","",paste("./figs/boxplot_deltaVSgender_eval7.pdf")), bg="white")
   
 
 ## anova 
