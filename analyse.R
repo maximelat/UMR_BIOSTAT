@@ -3,13 +3,24 @@ library(dplyr)
 library(ggplot2)
 library(RColorBrewer)
 library(dslabs)
+library(readxl)
+
+
+ eval1<- read_excel("./eval1.xlsx")
+eval1
+
+
 url <- "http://www.statsci.org/data/oz/strokeass.txt"
 eval2 <- read.delim(url)
 download.file(url, "eval2.txt")
 
 eval2
 
+url <- "http://www.statsci.org/data/general/fullmoon.txt"
+eval3 <- read.delim(url)
+download.file(url, "eval2.txt")
 
+eval3
 
 url <- "http://www.statsci.org/data/general/eysenck.txt"
 eval4 <- read.delim(url)
@@ -24,10 +35,18 @@ download.file(url, "eval5.txt")
 
 eval5
 
+url <- "http://www.statsci.org/data/general/cholestg.txt"
+eval6 <- read.delim(url)
+download.file(url, "eval5.txt")
+
+eval6
+
+
 
 url <- "http://www.statsci.org/data/oz/ms212.txt"
 eval7 <- read.delim(url)
 download.file(url, "eval7.txt")
+eval7$Height[102]
 eval7$Height[102]<- 168
 eval7$Gender[eval7$Gender == 1] <- "Male"
 eval7$Gender[eval7$Gender == 2] <- "Female"
@@ -45,20 +64,37 @@ eval7$Exercise
 eval7$Ran[eval7$Ran == 1] <- "Ran"
 eval7$Ran[eval7$Ran == 2] <- "Sat"
 eval7$Ran
+eval7 <- eval7 %>%  
+  mutate(IMC = Weight/((Height/100)^2)) %>%  
+  mutate(delta = Pulse2-Pulse1)
 
+
+eval7
 summary(eval7)
+
 
 
 eval7 %>%  
   mutate(IMC = Weight/((Height/100)^2)) %>%  
   mutate(delta = Pulse2-Pulse1) %>% 
-  ggplot(aes(IMC, delta, label=Gender ,color=Gender, shape=Smokes)) +
-  geom_point(aes(IMC, delta, label=Gender,color=Gender, shape=Smokes)) +
-  scale_shape() +
+  ggplot(aes(IMC, delta, label=Gender ,color=Gender, shape=Ran,size=Smokes)) +
+  geom_point(aes(IMC, delta, label=Gender,color=Gender, shape=Ran,size=Smokes)) +
+  scale_shape( ) +
  labs( x = "IMC", y = "Delta entre deux pulses",
             title ="Dispertion des échantillons",
             subtitle = "Deltas en des hommes et des femmes fumeurs ou non en fonction de leur IMC",
             caption = "Premier aperçu des données") 
+
+
+eval7 %>%  filter(Ran=="Ran") %>%
+  ggplot(aes(Height, delta, label=Gender ,color=Gender, shape=Smokes)) +
+  geom_point(aes(Height, delta, label=Gender,color=Gender, shape=Smokes)) +
+  scale_shape() +
+  labs( x = "Height", y = "Delta entre deux pulses",
+        title ="Dispertion des échantillons",
+        subtitle = "Deltas en des hommes et des femmes fumeurs ou non en fonction de leur IMC",
+        caption = "Premier aperçu des données") 
+
  //annotate(geom = "text", x = 8, y = 9, label = "A")
   //geom_label(aes(IMC, delta,label=Gender, color=Gender)) 
   // geom_text(aes(IMC, delta, label=Gender, color=Gender)) 
@@ -67,12 +103,14 @@ dev.print(device = pdf, file = gsub(" ","",paste("./figs/dispersion_echantillons
 
 
 
-## densité de delta en fonction du sexe
-eval7 %>%  
+## densité de delta en fonction de Ran sexe
+eval7 %>%
   mutate(delta = Pulse2-Pulse1) %>% 
-  ggplot(aes(delta,color = Gender,fill = Gender)) + 
-  geom_density(aes(delta, color = Gender,fill = Gender), alpha = 0.2)
+  ggplot(aes(delta,color = Ran,fill = Ran)) + 
+  geom_density(aes(delta, color = Ran,fill = Ran), alpha = 0.2)
 dev.print(device = pdf, file = gsub(" ","",paste("./figs/densite_DeltaVSGenre_eval7.pdf")), bg="white")
+
+
 
 ## densité de delta en fonction de la consomation frequente d'alcool
 eval7 %>%  
@@ -109,14 +147,14 @@ delta <-  eval7$Pulse2-eval7$Pulse1
   boxplot(delta ~ Smokes, data = eval7) 
   dev.print(device = pdf, file = gsub(" ","",paste("./figs/boxplot_deltaVSSmokes_eval7.pdf")), bg="white")
   
-  boxplot(delta ~ Gender, data = eval7)
+  boxplot(delta ~ Ran, data = eval7)
   dev.print(device = pdf, file = gsub(" ","",paste("./figs/boxplot_deltaVSgender_eval7.pdf")), bg="white")
   
 
 ## anova 
   
   
-    delta = eval7$Pulse2-eval7$Pulse1
+    delta = eval7$delta
     IMC = eval7$Weight/((eval7$Height/100)^2)
     Gender <- eval7$Gender
     Age <- eval7$Age
@@ -124,16 +162,23 @@ delta <-  eval7$Pulse2-eval7$Pulse1
     Alcohol <- eval7$Alcohol
     Exercice <- eval7$Exercise
     Ran <- eval7$Ran
-
-     breaks.aov <- aov(delta ~ IMC+Gender+Age+Smokes*Alcohol+Exercice*Ran)
+    Height <- eval7$Height
+    Weight <- eval7$Weight
+    
+     breaks.aov <- aov(delta ~ Height+Weight+IMC+Gender+Age+Smokes+Alcohol+Exercice+Ran)
   
      anova(breaks.aov)  
      coef(breaks.aov)
      
-     
-     breaks.aov <- aov(delta ~ Age+Smokes+Ran)
+     breaks.aov <- aov(IMC ~ Height+Weight+Gender+Alcohol)
      
      anova(breaks.aov)  
+     coef(breaks.aov)
+     
+     
+     breaks.aov <- aov(delta ~ Height+Gender+Smokes+Ran)
+
+    anova(breaks.aov)  
      coef(breaks.aov)
      
      52.7-0.058*18+2.01+52.22
@@ -141,16 +186,15 @@ delta <-  eval7$Pulse2-eval7$Pulse1
      
      ## quest ce qui est responsalbe de la variabilité de ceux qui ont courrus
      
-     Ran_SmokesYes = filter(eval7, eval7$Ran == "Ran")$Weight/(filter(eval7, eval7$Gender == "Male")$Height/100)^2
-     
+     Ran_SmokesYes = filter(eval7, eval7$Ran == "Ran" && eval7$Gender == "Male")$Weight/(filter(eval7, eval7$Ran == "Ran" && eval7$Gender == "Male")$Height/100)^2
      breaks.aov  <-  eval7 %>%  
        mutate(delta = Pulse2-Pulse1) %>%
        mutate(IMC = Weight/((Height/100)^2)) %>%  
        filter(Ran == "Ran" & Alcohol == "Yes") 
      
-     aov(breaks.aov$Alcohol ~ breaks.aov$IMC+breaks.aov$Gender+breaks.aov$Age+breaks.aov$Alcohol+breaks.aov$Exercice*breaks.aov$Ran)
+     breaks.aov <-   aov(breaks.aov$Alcohol ~ breaks.aov$IMC+breaks.aov$Gender+breaks.aov$Age+breaks.aov$Alcohol+breaks.aov$Exercice*breaks.aov$Ran)
      
-     breaks.aov
+     summary(eval7)
      
      
      anova(breaks.aov)  
@@ -198,14 +242,155 @@ delta_RanNo = filter(eval7, eval7$Ran == "Sat")$Pulse2-filter(eval7, eval7$Ran =
 full(na.omit(delta_RanYes),na.omit(delta_RanNo),"",F,F)
 
 
-murders %>% ggplot(aes(population, total, label=abb)) +
-  geom_point(aes(population, total)) + geom_label(aes(population, total,label=abb))
+eval7
+eval7Bis <- eval7 %>% filter( Gender  & Year < 95) %>% select(Gender)
 
 
-gapminder %>% mutate(dollars_per_day = gdp/population/365) %>% 
-  filter(continent == "Africa" & year %in% c(1970,2010) & !is.na(dollars_per_day) & !is.na(gdp) & !is.na(infant_mortality))%>% 
-  ggplot(aes(dollars_per_day,infant_mortality,color = region,label = country)) +  geom_point(aes( )) + scale_x_continuous(trans="log2") +geom_text(aes()) + facet_grid(year~.)
 
- 
+Female_B95 <- filter(eval7, eval7$Year <= 95 & eval7$Gender == "Female")[8]
+B95FS <- nrow(filter(Female_B95,Ran == "Sat")) 
+B95FR <- nrow(filter(Female_B95,Ran == "Ran" ))
 
+Female_A95 <- filter(eval7, eval7$Year >= 95 & eval7$Gender == "Female")[8]
+A95FS <- nrow(filter(Female_A95,Ran == "Sat")) 
+A95FR <- nrow(filter(Female_A95,Ran == "Ran" ))
+
+prop.test(c(A95FR,B95FR),c(A95FS+A95FR,B95FR+B95FS))
+
+
+male_B95 <- filter(eval7, eval7$Year <= 95 & eval7$Gender == "Male")[8]
+B95MS <- nrow(filter(male_B95,Ran == "Sat")) 
+B95MR <- nrow(filter(male_B95,Ran == "Ran" ))
+
+male_A95 <- filter(eval7, eval7$Year >= 95 & eval7$Gender == "Male")[8]
+A95MS <- nrow(filter(male_A95,Ran == "Sat")) 
+A95MR <- nrow(filter(male_A95,Ran == "Ran" ))
+
+prop.test(c(A95MR,B95MR),c(A95MS+A95MR,B95MR+B95MS))
+
+p = 0.39
+
+Alcohol_B95 <- filter(eval7, eval7$Year <= 95 & eval7$Alcohol == "Yes")[8]
+B95SS <- nrow(filter(Alcohol_B95,Ran == "Sat")) 
+B95SR <- nrow(filter(Alcohol_B95,Ran == "Ran" ))
+
+Alcohol_A95 <- filter(eval7, eval7$Year >= 95 & eval7$Alcohol == "No")[8]
+A95NS <- nrow(filter(Alcohol_A95,Ran == "Sat")) 
+A95NR <- nrow(filter(Alcohol_A95,Ran == "Ran" ))
+
+prop.test(c(B95SS,A95NS),c(B95SS+B95SR,A95NS+A95NR))
+
+
+
+AnormalB <- filter(eval7, eval7$Year <= 95 & IMC <18 & IMC >25 )[8]
+B95AS <- nrow(filter(AnormalB,Ran == "Sat")) 
+B95AR <- nrow(filter(AnormalB,Ran == "Ran" ))
+
+AnormalA <- filter(eval7, eval7$Year > 95 & IMC <18 | IMC >25)[8]
+A95AS <- nrow(filter(AnormalA,Ran == "Sat")) 
+A95AR <- nrow(filter(AnormalA,Ran == "Ran" ))
+
+prop.test(c(B95AS,A95AS),c(B95AR+B95AS,A95AS+A95AR))
+
+summary(Pulse1)
+
+P1B <- filter(eval7, eval7$Year <= 95, eval7$Pulse1>76)[8]
+P1BAS <- nrow(filter(P1B,Ran == "Sat")) 
+P1BAR <- nrow(filter(P1B,Ran == "Ran" ))
+
+P1H <- filter(eval7, eval7$Year > 95,eval7$Pulse1>76)[8]
+P1HAS <- nrow(filter(P1H,Ran == "Sat")) 
+P1HAR <- nrow(filter(P1H,Ran == "Ran" ))
+prop.test(c(P1BAS,P1HAS),c(P1BAS+P1BAR,P1HAS+P1HAR))
+
+
+P1B <- filter(eval7, eval7$Year %in% c(93,95), eval7$Smokes=="Yes")[8]
+P1BAS <- nrow(filter(P1B,Ran == "Sat")) 
+P1BAR <- nrow(filter(P1B,Ran == "Ran" ))
+
+P1H <- filter(eval7, eval7$Year > 95 ,eval7$Smokes=="Yes" )[8]
+P1HAS <- nrow(filter(P1H,Ran == "Sat")) 
+P1HAR <- nrow(filter(P1H,Ran == "Ran" ))
+
+MP <- rbind(c(P1BAS,P1BAR),c(P1HAS,P1HAR))
+fisher.test(MP)
+
+
+
+############### COMPTE RENDU 
+
+Smokes_Pulse1 <- filter(eval7, Smokes == "Yes")$Pulse1
+mean(Smokes_Pulse1)
+#[1] 77.54545
+sd(Smokes_Pulse1)
+# [1] 9.574588
+var(Smokes_Pulse1)
+#[1] 91.67273
+eval7
+
+NoSmokes_Pulse1 <- filter(eval7, Smokes == "No")$Pulse1
+mean(na.omit(NoSmokes_Pulse1))
+#[1] 75.47959
+sd(na.omit(NoSmokes_Pulse1))
+#[1] 13.67459
+var(na.omit(NoSmokes_Pulse1))
+#[1] 186.9944
+
+
+####### MAX
+
+eval7 <- eval7 %>%  
+  mutate(IMC = Weight/((Height/100)^2)) %>%  
+  mutate(delta = Pulse2-Pulse1)
+eval7
+
+filter(eval7, IMC>18.5, IMC <25)
+
+filter(eval7, IMC<18.5, Exercise == "Hight")$IMC
+filter(eval7, IMC<18.5, Exercise == "Moderate")$IMC
+filter(eval7, IMC<18.5, Exercise == "Low")$IMC
+
+filter(eval7, IMC>18.5, IMC <25, Exercise == "Hight")$IMC
+filter(eval7, IMC>18.5, IMC <25, Exercise == "Moderate")$IMC
+filter(eval7, IMC>18.5, IMC <25, Exercise == "Low")$IMC
+
+filter(eval7, IMC>25, IMC <30, Exercise == "Hight")$IMC
+filter(eval7, IMC>25, IMC <30, Exercise == "Moderate")$IMC
+filter(eval7, IMC>25, IMC <30, Exercise == "Low")$IMC
+
+filter(eval7, IMC>30, Exercise == "Moderate")$IMC
+filter(eval7, IMC>30, Exercise == "Hight")$IMC
+filter(eval7, IMC>30, Exercise == "Low")$IMC
+
+surpoidObese <- c(filter(eval7, IMC>30, Exercise == "Moderate")$Pulse1,
+      filter(eval7, IMC>30, Exercise == "Hight")$Pulse1,
+      filter(eval7, IMC>30, Exercise == "Low")$Pulse1,
+      filter(eval7, IMC>25, IMC <30, Exercise == "Hight")$Pulse1,
+      filter(eval7, IMC>25, IMC <30, Exercise == "Moderate")$Pulse1,
+      filter(eval7, IMC>25, IMC <30, Exercise == "Low")$Pulse1)
+
+denutriNormal <- c(filter(eval7, IMC<18.5, Exercise == "Hight")$Pulse1,
+filter(eval7, IMC<18.5, Exercise == "Moderate")$Pulse1,
+filter(eval7, IMC<18.5, Exercise == "Low")$Pulse1,
+filter(eval7, IMC>18.5, IMC <25, Exercise == "Hight")$Pulse1,
+filter(eval7, IMC>18.5, IMC <25, Exercise == "Moderate")$Pulse1,
+filter(eval7, IMC>18.5, IMC <25, Exercise == "Low")$Pulse1)
+
+
+
+NoSmokes_Pulse1 <- filter(eval7, Smokes == "No", Ran=="Ran")$delta
+Smokes_Pulse1 <- filter(eval7, Smokes == "Yes",Ran=="Ran")$delta
+
+full(na.omit(Smokes_Pulse1),na.omit(NoSmokes_Pulse1),"",F,F)
+
+NoAl_Pulse1 <- filter(eval7, Alcohol == "No")$Pulse1
+Al_Pulse1 <- filter(eval7, Alcohol == "Yes")$Pulse1
+full(na.omit(NoAl_Pulse1 ),na.omit(Al_Pulse1) ,"",F,F)
+
+NoAl_Pulse1 <- filter(eval7, Alcohol == "No")$Pulse1
+Al_Pulse1 <- filter(eval7, Alcohol == "Yes")$Pulse1
+full(na.omit(surpoidObese ),na.omit(denutriNormal) ,"",F,F)
+
+
+boxplot(delta ~ Smokes)
 
