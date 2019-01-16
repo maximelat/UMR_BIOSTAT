@@ -1,47 +1,12 @@
 library(dplyr)
 
-eval1<- read_excel("./eval1.xlsx")
-eval1
-
-
-url <- "http://www.statsci.org/data/oz/strokeass.txt"
-eval2 <- read.delim(url)
-download.file(url, "eval2.txt")
-
-eval2
-
-url <- "http://www.statsci.org/data/general/fullmoon.txt"
-eval3 <- read.delim(url)
-download.file(url, "eval2.txt")
-
-eval3
-
-url <- "http://www.statsci.org/data/general/eysenck.txt"
-eval4 <- read.delim(url)
-download.file(url, "eval4.txt")
-
-eval4
-
-
-url <- "http://www.statsci.org/data/oz/stroke.txt"
-eval5 <- read.delim(url)
-download.file(url, "eval5.txt")
-
-eval5
-
-url <- "http://www.statsci.org/data/general/cholestg.txt"
-eval6 <- read.delim(url)
-download.file(url, "eval5.txt")
-
-eval6
-
-
-
 url <- "http://www.statsci.org/data/oz/ms212.txt"
 eval7 <- read.delim(url)
 download.file(url, "eval7.txt")
-
+eval7$Weight
+eval7$Weight[106]<- 72
 eval7$Height[102]<- 168
+eval7$Height[106]<- 193
 eval7$Gender[eval7$Gender == 1] <- "Male"
 eval7$Gender[eval7$Gender == 2] <- "Female"
 eval7$Gender
@@ -58,8 +23,8 @@ eval7$Exercise
 eval7$Ran[eval7$Ran == 1] <- "Ran"
 eval7$Ran[eval7$Ran == 2] <- "Sat"
 eval7$Ran
+## ajout de delta et IMC 
+eval7<- eval7 %>%  
+  mutate(IMC = Weight/((Height/100)^2)) %>%  
+  mutate(delta = Pulse2-Pulse1)
 
-eval7<-mutate(eval7,delta = eval7$Pulse2-eval7$Pulse1,IMC = eval7$Weight/((eval7$Height/100)^2))
-
-
-eval7
