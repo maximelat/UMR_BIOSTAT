@@ -2,7 +2,7 @@
 
 ## Consignes d'utilisation 
 ## Rapport
-Le dossier Rapport comporte le rapport écrit Rapport.pdf ainsi que ses figures 
+Le dossier Rapport comporte le rapport écrit Rapport.pdf, ses figures ainsi que les slides de presentation orale (presentation.pdf).
 
 ## Analyses R 
 D'abord il faut installer les bons packages : 
@@ -41,7 +41,7 @@ Analyses complémentaires pour recherche d'informations pertinentes à présente
 > synthese.R 
 Permet d'analyser en une fonction  deux vecteurs et le comparer. Le choix du test de comparaison est effectué grace à choix_test.R. 
 
-```full(Var1,Var2,Dossier d'export,teste de normalité=False,echelle log=False)```
+```full(Var1,Var2,Nom du Dossier d'export dans figs,teste de normalité=False,echelle log=False)```
 
 
 

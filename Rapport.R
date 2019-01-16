@@ -26,7 +26,6 @@ de leur taille et de leur consommation d'alcool",
         caption = "Premier aperçu des données") +
   facet_grid(Gender ~.)
 
-
 eval7 %>%  filter(Ran=="Ran") %>%
   ggplot(aes(Height, Pulse1, label=Gender ,color=Gender)) +
   geom_point(aes(Height, Pulse1, label=Gender,color=Gender)) +
@@ -77,10 +76,10 @@ anova(breaks.aov)
 coef(breaks.aov)
 
 ################ Objectif 2 ###################
-delta_SmokesYes = filter(eval7, eval7$Alcohol == "Yes")$Pulse2-
-  filter(eval7, eval7$Alcohol == "Yes")$Pulse1
-delta_SmokesNo = filter(eval7, eval7$Alcohol == "No")$Pulse2-
-  filter(eval7, eval7$Alcohol == "No")$Pulse1
+delta_SmokesYes = filter(eval7, eval7$Smokes == "Yes")$Pulse2-
+  filter(eval7, eval7$Smokes == "Yes")$Pulse1
+delta_SmokesNo = filter(eval7, eval7$Smokes == "No")$Pulse2-
+  filter(eval7, eval7$Smokes == "No")$Pulse1
 sd(delta_SmokesYes)
 sd(na.omit(delta_SmokesNo))
 
@@ -128,6 +127,7 @@ P1H <- filter(eval7, eval7$Year > 95)[8]
 P1HAS <- nrow(filter(P1H,Ran == "Sat")) 
 P1HAR <- nrow(filter(P1H,Ran == "Ran" ))
 #khi 2 
+MP <- rbind(c(P1BAS,P1BAR),c(P1HAS,P1HAR))
 prop.test(c(P1BAS,P1HAS),c(P1BAS+P1BAR,P1HAS+P1HAR))
 
 #Comparaison de la proportion de fumeurs ayant couru avant et après 95 
