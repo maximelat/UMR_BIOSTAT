@@ -61,26 +61,12 @@ delta <-  eval7$Pulse2-eval7$Pulse1
   
      
      
-     ## test de comparaisons de moyennes indépendantes 
+  ########### Teste 
 
-## ad hoc ? 
-
-     require (ROCR); require(gplots) ; require(stats) ; require(utils) ; require(splines) ; require(pROC) ; require(Matrix) ; require(MASS) ; require(methods) ; require(grDevices) ; require(graphics) ; require(gplots) ; require(datasets)
-     library(dplyr)
-     library(ggplot2)
-     library(dslabs)
-     source("./testSWW.R")
+require (ROCR); require(gplots) ; require(stats) ; require(utils) ; require(splines) ; require(pROC) ; require(Matrix) ; require(MASS) ; require(methods) ; require(grDevices) ; require(graphics) ; require(gplots) ; require(datasets) ; library(dplyr) ; library(ggplot2) ; library(dslabs) ;source("./testSWW.R")
      
-     
-     
-     
-     
-     ########### TEste 
 source("./synthese.R")
      
-
-
-
 IMC_Male = filter(eval7, eval7$Gender == "Male")$Weight/(filter(eval7, eval7$Gender == "Male")$Height/100)^2
 delta_Male = filter(eval7, eval7$Gender == "Male")$Pulse2-filter(eval7, eval7$Gender == "Male")$Pulse1
 IMC_Female = filter(eval7, eval7$Gender == "Female")$Weight/(filter(eval7, eval7$Gender == "Female")$Height/100)^2

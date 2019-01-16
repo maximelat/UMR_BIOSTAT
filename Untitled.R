@@ -145,5 +145,15 @@ fisher.test(MP)
 
 
 ########## PREZ
+require (ROCR); require(gplots) ; require(stats) ; require(utils) ; require(splines) ; require(pROC);
+require(Matrix) ; require(MASS) ; require(methods) ; require(grDevices) ; require(graphics) ; 
+require(gplots) ; require(datasets) ; library(dplyr) ; library(ggplot2) ; library(dslabs) ;
+source("./testSWW.R")
+source("./testSWW.R")
+source("./synthese.R")
 
+delta_RanYes = filter(eval7, eval7$Ran == "Ran")$Pulse2-filter(eval7, eval7$Ran == "Ran")$Pulse1
+delta_RanNo = filter(eval7, eval7$Ran == "Sat")$Pulse2-filter(eval7, eval7$Ran == "Sat")$Pulse1
+#Non appariés et pas de graphique 
+full(na.omit(delta_RanYes),na.omit(delta_RanNo),"",F,F)
 
