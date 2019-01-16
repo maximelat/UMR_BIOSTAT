@@ -1,7 +1,10 @@
 # UMR_BIOSTAT
 
-### Consignes d'utilisation 
+## Consignes d'utilisation 
+## Rapport
+Le dossier Rapport comporte le rapport écrit Rapport.pdf ainsi que ses figures 
 
+## Analyses R 
 D'abord il faut installer les bons packages : 
 
 Packages à installer : 
